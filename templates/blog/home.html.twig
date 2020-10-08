@@ -1,0 +1,210 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    {% if not app.user %}
+        <h1>Bonjour</h1>
+        <p>Vous commencez la musculation? Vous cherchez à perdre du poids ?
+        <p>Sur ce site vous pouvez suivre l'évolution de votre poids, de votre masse graisseuse et de votre masse musculaire semaine après semaine !</p>
+        <p>Idéal pour suivre ses progrès et rester motivé !</p>
+        <a href="{{ path('security_login')}}"> Connectez vous pour commencer votre suivi ! </a>
+    {% else %}
+    <h1>Bonjour {{ app.user.nom }}</h1>
+
+    <p>Vous êtes un {{ app.user.sexe }} et mesurez {{ app.user.taille }} cm.</p>
+    <p>Vos dernières mesures de poids sont :
+    {% for data in datas %}
+    
+        {{ data.poids}} kg,
+    {% endfor %}
+    </p>
+    <p>Evolution de votre masse graisseuse :
+    {% for data in datas %}
+    
+        {{ data.masseGraisseuse}} %,
+    {% endfor %}
+    </p>
+
+    <p>Evolution de votre masse musculaire :
+    {% for data in datas %}
+    
+        {{ data.masseMusculaire }} %,
+    {% endfor %}
+    </p>
+    
+    <a class="btn btn-success" href="{{ path('mesures')}}"> Nouvelle pesée</a>
+                
+
+    <canvas id="myChart" width="400" height="200"></canvas>
+    <canvas id="myChart2" width="400" height="200"></canvas>
+    <canvas id="myChart3" width="400" height="200"></canvas>
+    
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+{% if  app.user %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+<script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+     var ctx2 = document.getElementById('myChart2').getContext('2d');
+      var ctx3 = document.getElementById('myChart3').getContext('2d');
+    
+var chart = new Chart(ctx, {
+     
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+    data: {
+        labels: [
+            
+           {% for data in datas %} 
+                {{ loop.index }} , 
+     {% endfor %},3,4,5,6,7,8], 
+        datasets: [{
+            label: 'Évolution du poids',
+            {# backgroundColor: 'rgb(255, 99, 132)', #}
+            borderColor: 'rgb(255, 99, 132)',
+            data:  [{% for data in datas %} { x:new Date({{ data.createdAt|format_date(pattern="YYYY', 'MM-1', 'dd")}}),
+                y: {{ (data.poids)|number_format(2, '.', ',') }} },   {% endfor %}],
+                options: {
+                    scales: {
+                        xAxes: [{
+                            type: 'time',
+                            distribution: 'linear',
+                            time: {
+                                parser: 'MM/DD/YYYY',
+                                // round: 'day'
+                                tooltipFormat: 'll HH:mm'
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Date'
+                            }
+                                    
+                        }]
+                    }
+                }
+        }]
+    },
+
+    // Configuration options go here
+    options: {scales: {
+         yAxes: [{
+            ticks: {
+                max: 80,
+                min: 50,
+                
+            }
+        }]
+    }}
+});
+var chart = new Chart(ctx2, {
+     
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+    data: {
+        labels: [
+            
+           {% for data in datas %} 
+                     {{ loop.index }} , 
+            {% endfor %},3,4,5,6,7,8], 
+        datasets: [{
+            label: 'Évolution de la masse graisseuse',
+            {# backgroundColor: 'rgb(255, 99, 132)', #}
+            borderColor: 'rgb(255, 99, 132)',
+            data:  [{% for data in datas %} { x:new Date({{ data.createdAt|format_date(pattern="YYYY', 'MM-1', 'dd")}}),
+                y:{{ (data.masseGraisseuse)|number_format(2, '.', ',') }} },   {% endfor %}],
+                options: {
+                    scales: {
+                        xAxes: [{
+                            type: 'time',
+                            distribution: 'linear',
+                            time: {
+                                parser: 'MM/DD/YYYY',
+                                // round: 'day'
+                                tooltipFormat: 'll HH:mm'
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Date'
+                            }
+                                    
+                        }]
+                    }
+                }
+        }]
+    },
+
+    // Configuration options go here
+    options: {
+         scales: {
+         yAxes: [{
+            ticks: {
+                max: 40,
+                min: 10,
+                
+            }
+        }]
+        }
+    }
+});
+var chart = new Chart(ctx3, {
+     
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+    data: {
+        labels: [
+            
+           {% for data in datas %} 
+    {# new Date({{ data.createdAt|format_date(pattern="YYYY', 'MM-1', 'dd")}}),  #}
+    {{ loop.index }} ,
+     {% endfor %},3,4,5,6,7,8], 
+        datasets: [{
+            label: 'Évolution de la masse Musculaire',
+            {# backgroundColor: 'rgb(255, 99, 132)', #}
+            borderColor: 'rgb(255, 99, 132)',
+            data:  [{% for data in datas %} { x:new Date({{ data.createdAt|format_date(pattern="YYYY', 'MM-1', 'dd")}}),
+                y:{{ (data.masseMusculaire)|number_format(2, '.', ',') }} },   {% endfor %}],
+                options: {
+                    scales: {
+                        xAxes: [{
+                            type: 'time',
+                            distribution: 'linear',
+                            time: {
+                                parser: 'MM/DD/YYYY',
+                                // round: 'day'
+                                tooltipFormat: 'll HH:mm'
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Date'
+                            }
+                                    
+                        }]
+                        
+                    }
+                }
+        }]
+    },
+
+    // Configuration options go here
+    options: {
+        scales: {
+        yAxes: [{
+            ticks: {
+                max: 50,
+                min: 20,
+                
+            }
+        }]
+    }
+    }
+});
+</script>
+{% endif %}
+{% endblock %}

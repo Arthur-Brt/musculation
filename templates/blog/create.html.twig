@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme formUser 'bootstrap_4_layout.html.twig' %}
+
+{% block body %}
+    <h1>Créez votre profil utilisateur</h1>
+    {{ form_start(formUser) }}
+
+    {{ form_row(formUser.nom) }}
+    {{ form_row(formUser.password) }}
+    {{ form_row(formUser.birthday) }}
+    {{ form_row(formUser.sexe) }}
+    {{ form_row(formUser.taille) }}
+   
+    <button type='submit' class='btn btn-success'>Valider le profil</button>
+    {{ form_end(formUser) }}
+{% endblock %}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Musculation{% endblock %}</title>
+        <link href="https://bootswatch.com/4/superhero/bootstrap.min.css" rel="stylesheet">
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+                <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="/">Home</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarColor02">
+                <ul class="navbar-nav mr-auto">
+                
+                {% if not app.user %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('security_login')}}">Log In</a>
+                </li>
+                 <li class="nav-item">
+                    <a class="nav-link" href="{{ path('security_registration')}}">Sign In</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('security_logout')}}">Logout</a>
+                </li>
+                 
+                {% endif %}
+               
+                </ul>
+                
+            </div>
+            </nav>
+            <div class="container">
+        {% block body %}{% endblock %}
+        </div>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

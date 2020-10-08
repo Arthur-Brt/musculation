@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme formUser 'bootstrap_4_layout.html.twig' %}
+
+{% block body %}
+    <h1>Créez votre profil utilisateur</h1>
+    {{ form_start(formUser) }}
+
+    {{ form_row(formUser.nom) }}
+    {{ form_row(formUser.password) }}
+    {{ form_row(formUser.confirm_password) }}
+    {{ form_row(formUser.birthday) }}
+    {{ form_row(formUser.sexe) }}
+    {{ form_row(formUser.taille) }}
+   
+    <button type='submit' class='btn btn-success'>Valider le profil</button>
+    {{ form_end(formUser) }}
+
+    <p>Vous avez déjà un compte ? <a href="{{ path('security_login')}}">Se connecter</a></p>
+{% endblock %}
